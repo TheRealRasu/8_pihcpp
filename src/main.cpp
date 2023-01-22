@@ -1,13 +1,18 @@
 #include <iostream>
 #include <vector>
 
-#define EXIT_SUCCESS 0
-#define EXIT_FAILURE 1
-
+#include <stdlib.h>
 
 int main()
 {
-    std::vector<uint8_t> memory (4096, 0);
+    // registers V0 to VF
+    std::vector<uint8_t> registers (16, 0);
+
+    uint16_t indexRegister {};
+
+    // provide 4 kB of memory (0x000 to 0xFFF)
+    std::vector<uint8_t> memoryData (4096, 0);
+
     // TODO
 
     return EXIT_SUCCESS;
