@@ -86,3 +86,4 @@ src/CMakeFiles/8_pihc.dir/progress.make
 8_pihc.includes
 cmake_install.cmake
 Makefile
+.vscode/settings.json
