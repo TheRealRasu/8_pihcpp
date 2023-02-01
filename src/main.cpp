@@ -1,4 +1,9 @@
 #include <iostream>
+<<<<<<< HEAD
+=======
+
+#include <stdlib.h>
+>>>>>>> added debug hw
 #include <vector>
 
 #include <stdlib.h>
@@ -14,6 +19,7 @@ int main()
     std::vector<uint8_t> memoryData (4096, 0);
 
     // TODO
+    std::cout << "Hello World!\n";
 
     return EXIT_SUCCESS;
 }
