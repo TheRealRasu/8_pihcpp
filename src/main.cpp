@@ -3,6 +3,8 @@
 #include <stdlib.h>
 #include <vector>
 
+bool gVerbose {};
+
 int main()
 {
     // registers V0 to VF
@@ -14,7 +16,7 @@ int main()
     std::vector<uint8_t> memoryData (4096, 0);
 
     // TODO
-    std::cout << "Hello World!\n";
+    std::cout << "Hello World! Verbose: " << std::boolalpha << gVerbose << "\n";
 
     return EXIT_SUCCESS;
 }
