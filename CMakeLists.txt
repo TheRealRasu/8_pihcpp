@@ -7,4 +7,4 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17 -O3")
 
 set(CMAKE_INSTALL_PREFIX ${PROJECT_SOURCE_DIR})
 
-add_executable(8_pihc main.cpp)
+add_executable(8_pihc src/main.cpp)
