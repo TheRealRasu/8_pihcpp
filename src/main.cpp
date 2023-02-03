@@ -1,7 +1,7 @@
 #include <iostream>
+#include <vector>
 
 #include <stdlib.h>
-#include <vector>
 
 bool gVerbose {};
 
