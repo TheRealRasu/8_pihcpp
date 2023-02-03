@@ -36,6 +36,7 @@ build/CMakeFiles/8_pihc.dir/flags.make
 build/CMakeFiles/8_pihc.dir/link.txt
 build/CMakeFiles/8_pihc.dir/progress.make
 build/CMakeFiles/8_pihc.dir/src/main.cpp.o
+.gitignore
 src/8_pihc
 src/cmake_install.cmake
 src/CMakeCache.txt
