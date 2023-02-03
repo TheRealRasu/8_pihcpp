@@ -1,12 +1,7 @@
 #include <iostream>
-<<<<<<< HEAD
-=======
 
 #include <stdlib.h>
->>>>>>> added debug hw
 #include <vector>
-
-#include <stdlib.h>
 
 int main()
 {
