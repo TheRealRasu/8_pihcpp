@@ -1,3 +1,4 @@
+.vscode/settings.json
 build/.cmake/api/v1/query/client-vscode/query.json
 build/.cmake/api/v1/reply/cache-v2-dc81b31a9347f3a815b4.json
 build/.cmake/api/v1/reply/cmakeFiles-v1-79b646eaba20ff3bf0e1.json
@@ -56,15 +57,13 @@ src/CMakeFiles/8_pihc.dir/flags.make
 src/CMakeFiles/8_pihc.dir/link.txt
 src/CMakeFiles/8_pihc.dir/main.cpp.o
 src/CMakeFiles/8_pihc.dir/progress.make
-.vscode/settings.json
+src/8_pihc
+src/cmake_install.cmake
+src/CMakeCache.txt
+build/.cmake/api/v1/reply/index-2023-02-03T10-30-24-0279.json
 build/8_pihc
 build/cmake_install.cmake
 build/CMakeCache.txt
 build/compile_commands.json
 build/Makefile
-build/.cmake/api/v1/reply/index-2023-02-03T10-30-24-0279.json
-src/8_pihc
-src/cmake_install.cmake
-src/CMakeCache.txt
-build/.cmake/api/v1/reply/index-2023-02-03T10-30-24-0279.json
 src/Makefile
