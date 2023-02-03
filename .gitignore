@@ -67,3 +67,7 @@ src/CMakeFiles/8_pihc.dir/flags.make
 src/CMakeFiles/8_pihc.dir/link.txt
 src/CMakeFiles/8_pihc.dir/main.cpp.o
 src/CMakeFiles/8_pihc.dir/progress.make
+build/CMakeFiles/8_pihc.dir/CXX.includecache
+build/8_pihc
+build/CMakeFiles/8_pihc.dir/depend.internal
+build/CMakeFiles/8_pihc.dir/src/main.cpp.o
