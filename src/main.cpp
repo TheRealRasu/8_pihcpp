@@ -15,6 +15,9 @@ int main()
     // provide 4 kB of memory (0x000 to 0xFFF)
     std::vector<uint8_t> memoryData (4096, 0);
 
+    uint64_t programCounter {};
+    
+
     // TODO
     std::cout << "Hello World! Verbose: " << std::boolalpha << gVerbose << "\n";
 
