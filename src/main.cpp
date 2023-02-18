@@ -1,3 +1,4 @@
+#include <cstring>
 #include <iostream>
 #include <string>
 #include <vector>
@@ -6,7 +7,7 @@
 
 bool gVerbose {};
 
-int main()
+void loadFonts(std::vector<uint8_t> memory)
 {
     // provide 4 kB of memory (0x000 to 0xFFF)
     std::vector<uint8_t> memoryData (4096, 0);
