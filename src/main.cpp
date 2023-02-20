@@ -3,8 +3,9 @@
 #include <vector>
 
 #include <stdlib.h>
+#include <SDL.h>
 
-bool gVerbose {};
+//bool gVerbose {};
 
 int main()
 {
