@@ -1,9 +1,12 @@
+#define SDL_MAIN_HANDLED
+
 #include <iostream>
 #include <string>
 #include <vector>
 
 #include <stdlib.h>
-#include <SDL.h>
+
+#include "SDL.h"
 
 //bool gVerbose {};
 
