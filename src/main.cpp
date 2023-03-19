@@ -5,8 +5,11 @@
 #include <vector>
 
 #include <stdlib.h>
+#include <Windows.h>
 
 #include "SDL.h"
+#include "SDL_video.h"
+//#include "SDL_wvideo.h"
 
 //bool gVerbose {};
 
@@ -36,7 +39,7 @@ int main()
     // stack pointer
     uint8_t stackPos {};
 
-    // load font
+    // load font; font vector does not need to live beyond this scope
     {
         const std::vector<uint8_t> font = 
         {
@@ -58,15 +61,23 @@ int main()
             0xF0, 0x80, 0xF0, 0x80, 0x80  // F
         };
 
-        memcpy(memory.data() + 50, font.data(), font.size());
-    }
-    // TODO
-    std::cout << "Hello World!\n";
-    
-    for (int i = 40; i < 130; i++)
-    {
-        std::cout << "data[" << i << "]: " << memoryData[i] << "\n";
+        memcpy(memoryData.data() + 50, font.data(), font.size());
     }
 
+    // TODO
+    {
+        SDL_Init(SDL_INIT_VIDEO);
+        std::cout << "Hello World!\n";
+
+    }
+    SDL_Window* window = SDL_CreateWindow("YEP", 0, 0, 500, 500, SDL_WINDOW_SHOWN);
+    
+    for (int i = 40; i < 140; i++)
+    {
+        std::cout << "data[" << i << "]: " << std::to_string(memoryData[i]) << "\n";
+    }
+
+    Sleep(2000);
+    SDL_Quit();
     return EXIT_SUCCESS;
 }
