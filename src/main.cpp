@@ -12,6 +12,7 @@
 //#include "SDL_wvideo.h"
 
 //bool gVerbose {};
+bool gTerminate {};
 
 int main()
 {
@@ -70,14 +71,30 @@ int main()
         std::cout << "Hello World!\n";
 
     }
-    SDL_Window* window = SDL_CreateWindow("YEP", 0, 0, 500, 500, SDL_WINDOW_SHOWN);
+    SDL_Window* window = SDL_CreateWindow("8_PIHC", 300, 100, 500, 500, SDL_WINDOW_SHOWN);
+    SDL_Renderer* renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
+    SDL_RenderClear(renderer);
+    SDL_RenderPresent(renderer);
     
-    for (int i = 40; i < 140; i++)
+    Sleep(2000);
+
+    SDL_SetRenderDrawColor(renderer, 255, 255, 255, 0);
+
+    for (int x = 100; x < 200; x++)
     {
-        std::cout << "data[" << i << "]: " << std::to_string(memoryData[i]) << "\n";
+        for (int y = 100; y < 200; y++)
+        {
+            SDL_RenderDrawPoint(renderer, x, y);
+        }
     }
 
+    SDL_RenderPresent(renderer);
+
+
     Sleep(2000);
+
+    SDL_DestroyRenderer(renderer);
+    SDL_DestroyWindow(window);
     SDL_Quit();
     return EXIT_SUCCESS;
 }
