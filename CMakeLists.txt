@@ -11,6 +11,6 @@ include_directories(${SDL2_INCLUDE_DIRS})
 
 add_executable(${PROJECT_NAME} src/main.cpp)
 
-add_library(Application src/Application.cpp src/Application.h)
+add_library(Application src/Application/Application.cpp src/Application/Application.h)
 target_link_libraries(Application SDL2::SDL2)
 target_link_libraries(8_pihcpp Application)

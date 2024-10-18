@@ -1,0 +1,8 @@
+#pragma once
+
+#define MEMORY_SIZE_BYTE 4096
+#define REGISTERS_SIZE 16
+#define STACK_SIZE 16
+
+#define FONT_OFFSET 50
+#define MEMORY_START_ADDRESS 512

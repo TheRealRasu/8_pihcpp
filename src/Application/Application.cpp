@@ -1,8 +1,10 @@
 #include "Application.h"
 
-#include <iostream>
+#include "ApplicationDefines.h"
+
 #include <fstream>
 #include <cmath>
+#include <iostream>
 #include <string>
 
 #include <Windows.h>
@@ -10,20 +12,19 @@
 #include "SDL_video.h"
 //#include "SDL_wvideo.h"
 
-#define START_ADDRESS 0x200
 
 Application::Application()
 {
-    mProgramCounter = START_ADDRESS;
+    mProgramCounter = MEMORY_START_ADDRESS;
 
     // registers V0 to VF
-    mRegisters.resize(16, 0);
+    mRegisters.resize(REGISTERS_SIZE, 0);
 
     // opcode stack
-    mPcStack.resize(16, 0);
+    mPcStack.resize(STACK_SIZE, 0);
 
     // provide 4 kB of memory (0x000 to 0xFFF)
-    mMemoryData.resize(4096, 0);
+    mMemoryData.resize(MEMORY_SIZE_BYTE, 0);
 
     // load font; font vector does not need to live beyond this scope
     {
@@ -47,7 +48,7 @@ Application::Application()
             0xF0, 0x80, 0xF0, 0x80, 0x80  // F
         };
 
-        memcpy(mMemoryData.data() + 50, font.data(), font.size());
+        memcpy(mMemoryData.data() + FONT_OFFSET, font.data(), font.size());
     }
 }
 
@@ -75,17 +76,17 @@ void Application::load(const char* fileName)
     if (fileRom.is_open())
     {
         const std::streampos size = fileRom.tellg();
-
+        
         std::vector<uint8_t> buffer(size, 0);
 
         fileRom.seekg(0, std::ios::beg);
-        fileRom.read((char*)buffer.data(), size);
+        fileRom.read(reinterpret_cast<char*>(buffer.data()), size);
         fileRom.close();
 
         std::cout << size << "\n";
-        for (int64_t pos = 0; pos < size; pos++)
+        for (uint64_t pos = 0; pos < static_cast<uint64_t>(size); pos++)
         {
-            mMemoryData[START_ADDRESS + pos] = buffer[pos];
+            mMemoryData.at(MEMORY_START_ADDRESS + pos) = buffer.at(pos);
         }
     }
 }
