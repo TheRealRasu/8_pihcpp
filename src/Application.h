@@ -1,6 +1,7 @@
 #define SDL_MAIN_HANDLED
 
 #include "SDL.h"
+#include <memory>
 #include <vector>
 
 class Application
@@ -14,8 +15,24 @@ class Application
         void update();
 
     protected:
-        SDL_Window* mWindow = nullptr;
-        SDL_Renderer* mRenderer = nullptr;
+        struct SdlWindowDtor
+        {
+            void operator()(SDL_Window* window) const
+            {
+                SDL_DestroyWindow(window);
+            }
+        };
+
+        struct SdlRendererDtor
+        {
+            void operator()(SDL_Renderer* renderer) const
+            {
+                SDL_DestroyRenderer(renderer);
+            }
+        };
+
+        std::unique_ptr<SDL_Renderer, SdlRendererDtor> mRenderer { nullptr };
+        std::unique_ptr<SDL_Window, SdlWindowDtor> mWindow { nullptr };
 
         // index register; point to memory address
         uint16_t mIndexRegister {};

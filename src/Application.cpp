@@ -53,8 +53,7 @@ Application::Application()
 
 Application::~Application()
 {
-    SDL_DestroyRenderer(mRenderer);
-    SDL_DestroyWindow(mWindow);
+    // SDL_Renderer and SDL_Window ptrs are automatically destroyed
     SDL_Quit();
 }
 
@@ -62,11 +61,11 @@ void Application::start()
 {
     SDL_Init(SDL_INIT_VIDEO);
 
-    mWindow = SDL_CreateWindow("8_PIHC", 300, 100, 640, 320, SDL_WINDOW_SHOWN);
-    mRenderer = SDL_CreateRenderer(mWindow, -1, SDL_RENDERER_ACCELERATED);
+    mWindow.reset(SDL_CreateWindow("8_PIHC", 300, 100, 640, 320, SDL_WINDOW_SHOWN));
+    mRenderer.reset(SDL_CreateRenderer(mWindow.get(), -1, SDL_RENDERER_ACCELERATED));
     
-    SDL_RenderClear(mRenderer);
-    SDL_RenderPresent(mRenderer);
+    SDL_RenderClear(mRenderer.get());
+    SDL_RenderPresent(mRenderer.get());
 }
 
 void Application::load(const char* fileName)
@@ -84,7 +83,7 @@ void Application::load(const char* fileName)
         fileRom.close();
 
         std::cout << size << "\n";
-        for (uint64_t pos = 0; pos < size; pos++)
+        for (int64_t pos = 0; pos < size; pos++)
         {
             mMemoryData[START_ADDRESS + pos] = buffer[pos];
         }
@@ -95,17 +94,17 @@ void Application::update()
 {
     Sleep(500);
 
-    SDL_SetRenderDrawColor(mRenderer, 255, 255, 255, 0);
+    SDL_SetRenderDrawColor(mRenderer.get(), 255, 255, 255, 0);
 
     for (int x = 100; x < 200; x++)
     {
         for (int y = 100; y < 200; y++)
         {
-            SDL_RenderDrawPoint(mRenderer, x, y);
+            SDL_RenderDrawPoint(mRenderer.get(), x, y);
         }
     }
 
-    SDL_RenderPresent(mRenderer);
+    SDL_RenderPresent(mRenderer.get());
 
     Sleep(500);
 }

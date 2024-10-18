@@ -203,3 +203,5 @@ Application.vcxproj.filters
 .vscode/settings.json
 .vscode/settings.json
 .vscode/settings.json
+Debug/Application.lib
+Debug/Application.pdb
