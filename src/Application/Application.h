@@ -15,6 +15,8 @@ class Application
         void update();
 
     protected:
+        void handleInstruction(uint16_t instruction);
+
         struct SdlWindowDtor
         {
             void operator()(SDL_Window* window) const

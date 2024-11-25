@@ -1,8 +1,18 @@
 #pragma once
 
-#define MEMORY_SIZE_BYTE 4096
-#define REGISTERS_SIZE 16
-#define STACK_SIZE 16
+constexpr uint8_t gRegistersSize { 16 }; // 0x10
+constexpr uint8_t gStackSize { 16 }; // 0x10
+constexpr uint16_t gMemorySizeBytes { 4096 }; // 0x1000
 
-#define FONT_OFFSET 50
-#define MEMORY_START_ADDRESS 512
+constexpr uint16_t gMemoryStartAddress { 512 }; // 0x200
+
+constexpr uint8_t gFontOffset { 50 }; // 0x22; address where font data is being loaded into
+
+constexpr uint8_t gFrameRate { 60 };
+
+
+// WINDOW DIMENSIONS
+constexpr uint16_t gWindowXPos { 500 };
+constexpr uint16_t gWindowYPos { 500 };
+constexpr uint16_t gWindowWidth { 640 };
+constexpr uint16_t gWindowHeight { 320 };
