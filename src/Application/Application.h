@@ -1,8 +1,11 @@
+#pragma once
 #define SDL_MAIN_HANDLED
 
 #include "SDL.h"
 #include <memory>
 #include <vector>
+
+class MemoryManager;
 
 class Application
 {
@@ -35,9 +38,7 @@ class Application
 
         std::unique_ptr<SDL_Renderer, SdlRendererDtor> mRenderer { nullptr };
         std::unique_ptr<SDL_Window, SdlWindowDtor> mWindow { nullptr };
-
-        // index register; point to memory address
-        uint16_t mIndexRegister {};
+        std::unique_ptr<MemoryManager> mMemoryManager;
 
         // program counter
         uint16_t mProgramCounter {};
@@ -50,13 +51,4 @@ class Application
 
         // stack pointer
         uint8_t stackPos {};
-
-        // memory
-        std::vector<uint8_t> mMemoryData {};
-        
-        // registers V0 to VF
-        std::vector<uint8_t> mRegisters {};
-
-        // opcode stack
-        std::vector<uint16_t> mPcStack {};
 };
