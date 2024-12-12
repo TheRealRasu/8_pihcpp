@@ -1,8 +1,10 @@
-#define SDL_MAIN_HANDLED
+#pragma once
 
-#include "SDL.h"
 #include <memory>
 #include <vector>
+
+class DisplayHandler;
+class MemoryManager;
 
 class Application
 {
@@ -17,27 +19,8 @@ class Application
     protected:
         void handleInstruction(uint16_t instruction);
 
-        struct SdlWindowDtor
-        {
-            void operator()(SDL_Window* window) const
-            {
-                SDL_DestroyWindow(window);
-            }
-        };
-
-        struct SdlRendererDtor
-        {
-            void operator()(SDL_Renderer* renderer) const
-            {
-                SDL_DestroyRenderer(renderer);
-            }
-        };
-
-        std::unique_ptr<SDL_Renderer, SdlRendererDtor> mRenderer { nullptr };
-        std::unique_ptr<SDL_Window, SdlWindowDtor> mWindow { nullptr };
-
-        // index register; point to memory address
-        uint16_t mIndexRegister {};
+        std::unique_ptr<DisplayHandler> mDisplayHandler;
+        std::unique_ptr<MemoryManager> mMemoryManager;
 
         // program counter
         uint16_t mProgramCounter {};
@@ -50,13 +33,4 @@ class Application
 
         // stack pointer
         uint8_t stackPos {};
-
-        // memory
-        std::vector<uint8_t> mMemoryData {};
-        
-        // registers V0 to VF
-        std::vector<uint8_t> mRegisters {};
-
-        // opcode stack
-        std::vector<uint16_t> mPcStack {};
 };
