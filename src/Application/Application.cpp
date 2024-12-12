@@ -42,10 +42,7 @@ void Application::load(const char* fileName)
         fileRom.read(reinterpret_cast<char*>(buffer.data()), size);
         fileRom.close();
 
-        for (uint64_t pos = 0; pos < static_cast<uint64_t>(size); pos++)
-        {
-            mMemoryData.at(gMemoryStartAddress + pos) = buffer.at(pos);
-        }
+        mMemoryManager->loadIntoMemory(buffer.data(), gMemoryStartAddress, static_cast<uint16_t>(size));
     }
 }
 

@@ -27,6 +27,11 @@ uint16_t MemoryManager::getCurrentInstruction(uint16_t programCounter) const
     return currentInstruction;
 }
 
+void MemoryManager::loadIntoMemory(void* data, uint16_t startingPosition, uint16_t dataSize)
+{
+    std::memcpy(mMemoryData.data() + startingPosition, data, dataSize);
+}
+
 void MemoryManager::setIndexRegister(uint16_t newValue)
 {
     mIndexRegister = newValue;
