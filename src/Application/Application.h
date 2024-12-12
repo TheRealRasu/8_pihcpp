@@ -1,10 +1,9 @@
 #pragma once
-#define SDL_MAIN_HANDLED
 
-#include "SDL.h"
 #include <memory>
 #include <vector>
 
+class DisplayHandler;
 class MemoryManager;
 
 class Application
@@ -20,24 +19,7 @@ class Application
     protected:
         void handleInstruction(uint16_t instruction);
 
-        struct SdlWindowDtor
-        {
-            void operator()(SDL_Window* window) const
-            {
-                SDL_DestroyWindow(window);
-            }
-        };
-
-        struct SdlRendererDtor
-        {
-            void operator()(SDL_Renderer* renderer) const
-            {
-                SDL_DestroyRenderer(renderer);
-            }
-        };
-
-        std::unique_ptr<SDL_Renderer, SdlRendererDtor> mRenderer { nullptr };
-        std::unique_ptr<SDL_Window, SdlWindowDtor> mWindow { nullptr };
+        std::unique_ptr<DisplayHandler> mDisplayHandler;
         std::unique_ptr<MemoryManager> mMemoryManager;
 
         // program counter

@@ -1,6 +1,7 @@
 #include "Application.h"
 #include "ApplicationDefines.h"
 
+#include "DisplayHandler.h"
 #include "MemoryManager.h"
 
 #include <cmath>
@@ -8,10 +9,9 @@
 #include <iostream>
 #include <string>
 
-#include "SDL_video.h"
-
 Application::Application()
 {
+    mDisplayHandler = std::make_unique<DisplayHandler>();
     mMemoryManager = std::make_unique<MemoryManager>();
 
     mProgramCounter = gMemoryStartAddress;
@@ -25,13 +25,7 @@ Application::~Application()
 
 void Application::start()
 {
-    SDL_Init(SDL_INIT_VIDEO);
-
-    mWindow.reset(SDL_CreateWindow("8_PIHC", gWindowXPos, gWindowYPos, gWindowWidth, gWindowHeight, SDL_WINDOW_SHOWN));
-    mRenderer.reset(SDL_CreateRenderer(mWindow.get(), -1, SDL_RENDERER_ACCELERATED));
-    
-    SDL_RenderClear(mRenderer.get());
-    SDL_RenderPresent(mRenderer.get());
+    mDisplayHandler->start();
 }
 
 void Application::load(const char* fileName)
@@ -62,18 +56,6 @@ void Application::update()
 
     const uint16_t currentInstruction = mMemoryManager->getCurrentInstruction(mProgramCounter);
     handleInstruction(currentInstruction);
-
-    SDL_SetRenderDrawColor(mRenderer.get(), 255, 255, 255, 0);
-
-    for (int x = 100; x < 200; x++)
-    {
-        for (int y = 100; y < 200; y++)
-        {
-            SDL_RenderDrawPoint(mRenderer.get(), x, y);
-        }
-    }
-
-    SDL_RenderPresent(mRenderer.get());
 }
 
 void Application::handleInstruction(uint16_t instruction)
@@ -98,16 +80,7 @@ void Application::handleInstruction(uint16_t instruction)
     {
         if (secondByte == 0xE0) // clear window
         {
-                SDL_Rect windowBox;
-                windowBox.w = gWindowWidth;
-                windowBox.h = gWindowHeight;
-                windowBox.x = gWindowXPos;
-                windowBox.y = gWindowYPos;
-
-                SDL_SetRenderDrawColor(mRenderer.get(), 0, 0, 0, 0);
-                SDL_RenderDrawRect(mRenderer.get(), &windowBox);
-                SDL_SetRenderDrawColor(mRenderer.get(), 0, 0, 0, 0);
-                SDL_RenderFillRect(mRenderer.get(), &windowBox);
+            mDisplayHandler->clearWindow();
         }
         else if (secondByte == 0xEE)
         {
