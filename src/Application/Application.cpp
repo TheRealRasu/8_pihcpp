@@ -51,7 +51,10 @@ void Application::update()
     if (mSoundTimer > 0) mSoundTimer--;
     if (mDelayTimer > 0) mDelayTimer--;
 
+    // Step 1: Get current instruction
     const uint16_t currentInstruction = mMemoryManager->getCurrentInstruction(mProgramCounter);
+
+    // Step 2: process current Instruction
     handleInstruction(currentInstruction);
 }
 
@@ -136,7 +139,6 @@ void Application::handleInstruction(uint16_t instruction)
     case 8:
     {
         mMemoryManager->handleRegisterOnRegisterOperation(fourthNibble, secondNibble, thirdNibble);
-        // TODO; arithmetic operations
         break;
     }
     case 9:
@@ -156,43 +158,87 @@ void Application::handleInstruction(uint16_t instruction)
         // TODO
         break;
     }
-    case 0xC:
+    case 0xC: // random number
     {
-        
+        int randomNumber = std::rand() % 256;
+        randomNumber &= secondByte;
+
+        mMemoryManager->setRegisterValue(secondNibble, randomNumber);
         
         break;
     }
     case 0xD:
     {
+        const int xValue = mMemoryManager->getRegisterValue(secondNibble) % gWindowWidth;
+        const int yValue = mMemoryManager->getRegisterValue(thirdNibble) % gWindowHeight;
+
+        void* spriteData = mMemoryManager->getMemoryData(mMemoryManager->getIndexRegister());
+
+        mDisplayHandler->drawSprite(xValue, yValue, fourthNibble, spriteData);
         // TODO
         break;
     }
     case 0xE:
     {
-        // TODO
+        if (secondByte == 0x9E)
+        {
+            // TODO
+        }
+        else if (secondByte == 0xA1)
+        {
+            // TODO
+        }
         break;
     }
     case 0xF: // handle Timers
     {
-        if (secondByte == 0x07)
+        switch (secondByte)
+        {
+        case 0x07:
         {
             mMemoryManager->setRegisterValue(secondNibble, mDelayTimer);
+            break;
         }
-        else if (secondByte == 0x15)
+        case 0x15:
         {
             mDelayTimer = mMemoryManager->getRegisterValue(secondNibble);
+            break;
         }
-        else if (secondByte == 0x15)
+        case 0x18:
         {
             mSoundTimer = mMemoryManager->getRegisterValue(secondNibble);
+            break;
         }
-        else if (secondByte == 0x1E)
+        case 0x1E:
         {
             // TODO
+            break;
         }
-        else if (secondByte == 0x0A)
+        case 0x0A:
         {
             // TODO
+            break;
+        }
+        case 0x29:
+        {
+            // TODO
+            break;
+        }
+        case 0x33:
+        {
+            // TODO
+            break;
+        }
+        case 0x55:
+        {
+            // TODO
+            break;
+        }
+        case 0x65:
+        {
+            // TODO
+            break;
+        }
         }
         break;
     }
