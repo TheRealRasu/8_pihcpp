@@ -32,6 +32,16 @@ void MemoryManager::loadIntoMemory(void* data, uint16_t startingPosition, uint16
     std::memcpy(mMemoryData.data() + startingPosition, data, dataSize);
 }
 
+void* MemoryManager::getMemoryData(uint8_t memoryOffset)
+{
+    return reinterpret_cast<void*>(mMemoryData.data()) + memoryOffset;
+}
+
+uint16_t MemoryManager::getIndexRegister() const
+{
+    return mIndexRegister;
+}
+
 void MemoryManager::setIndexRegister(uint16_t newValue)
 {
     mIndexRegister = newValue;
