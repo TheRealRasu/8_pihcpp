@@ -15,9 +15,11 @@ class DisplayHandler
 
         void start();
         void stop();
+
+        void drawSprite(uint16_t xPos, uint16_t yPos, uint8_t spriteHeight, void* spriteData);
     
         void clearWindow();
-        void update();
+        void debugDraw();
 
     protected:
 

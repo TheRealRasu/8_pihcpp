@@ -14,5 +14,5 @@ constexpr uint8_t gFrameRate { 60 };
 // WINDOW DIMENSIONS
 constexpr uint16_t gWindowXPos { 500 };
 constexpr uint16_t gWindowYPos { 500 };
-constexpr uint16_t gWindowWidth { 640 };
-constexpr uint16_t gWindowHeight { 320 };
+constexpr uint16_t gWindowWidth { 64 };
+constexpr uint16_t gWindowHeight { 32 };
