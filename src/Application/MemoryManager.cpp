@@ -34,7 +34,7 @@ void MemoryManager::loadIntoMemory(void* data, uint16_t startingPosition, uint16
 
 void* MemoryManager::getMemoryData(uint8_t memoryOffset)
 {
-    return reinterpret_cast<void*>(mMemoryData.data()) + memoryOffset;
+    return reinterpret_cast<void*>(mMemoryData.data() + memoryOffset);
 }
 
 uint16_t MemoryManager::getIndexRegister() const

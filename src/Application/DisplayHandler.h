@@ -5,8 +5,6 @@
 
 #include <memory>
 
-class SDL_Renderer;
-
 class DisplayHandler
 {
     public:

@@ -4,10 +4,8 @@
 #include "DisplayHandler.h"
 #include "MemoryManager.h"
 
-#include <cmath>
 #include <fstream>
-#include <iostream>
-#include <string>
+#include <iosfwd>
 
 Application::Application()
 {
@@ -20,7 +18,6 @@ Application::Application()
 Application::~Application()
 {
     // SDL_Renderer and SDL_Window ptrs are automatically destroyed
-    SDL_Quit();
 }
 
 void Application::start()

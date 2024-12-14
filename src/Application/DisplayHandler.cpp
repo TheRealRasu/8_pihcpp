@@ -11,7 +11,9 @@ DisplayHandler::DisplayHandler()
 {}
 
 DisplayHandler::~DisplayHandler()
-{}
+{
+    SDL_Quit();
+}
 
 void DisplayHandler::start()
 {

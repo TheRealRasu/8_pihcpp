@@ -1,5 +1,7 @@
 #pragma once
 
+#include <cstdint>
+
 constexpr uint8_t gRegistersSize { 16 }; // 0x10
 constexpr uint8_t gStackSize { 16 }; // 0x10
 constexpr uint16_t gMemorySizeBytes { 4096 }; // 0x1000

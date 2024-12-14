@@ -5,3 +5,10 @@ src/8_pihc
 src/cmake_install.cmake
 src/Makefile
 CMakeCache.txt
+x64/
+8_pihcpp.dir/
+Application.dir/
+Debug/
+*vcxproj*
+8_pihcpp.sln
+cmake_install.cmake
