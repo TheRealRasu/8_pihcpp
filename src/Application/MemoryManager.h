@@ -12,7 +12,7 @@ class MemoryManager
         uint16_t getCurrentInstruction(uint16_t programCounter) const;
 
         void loadIntoMemory(void* data, uint16_t startingPosition, uint16_t dataSize);
-        void* getMemoryData(uint8_t memoryOffset);
+        void* getMemoryData(uint16_t memoryOffset);
 
         // INDEX REGISTER
         uint16_t getIndexRegister() const;

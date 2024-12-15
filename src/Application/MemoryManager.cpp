@@ -32,7 +32,7 @@ void MemoryManager::loadIntoMemory(void* data, uint16_t startingPosition, uint16
     std::memcpy(mMemoryData.data() + startingPosition, data, dataSize);
 }
 
-void* MemoryManager::getMemoryData(uint8_t memoryOffset)
+void* MemoryManager::getMemoryData(uint16_t memoryOffset)
 {
     return reinterpret_cast<void*>(mMemoryData.data() + memoryOffset);
 }
