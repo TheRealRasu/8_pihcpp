@@ -29,6 +29,9 @@ class MemoryManager
         bool areRegisterValuesEqual(uint8_t firstRegister, uint8_t secondRegister) const;
         void handleRegisterOnRegisterOperation(uint8_t operation, uint8_t firstRegisterIdx, uint8_t secondRegisterIdx);
 
+        void storeRegistersInMemory();
+        void loadRegistersFromMemory();
+
     protected:
         void loadFont();
 

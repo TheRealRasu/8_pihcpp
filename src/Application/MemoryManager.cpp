@@ -2,6 +2,7 @@
 
 #include "ApplicationDefines.h"
 
+#include <cstdint>
 #include <cstring>
 
 MemoryManager::MemoryManager()
@@ -133,6 +134,28 @@ void MemoryManager::handleRegisterOnRegisterOperation(uint8_t operation, uint8_t
     {
         break;
     }
+    }
+}
+
+void MemoryManager::storeRegistersInMemory()
+{
+    uint8_t* memoryAddress = mMemoryData.data() + mIndexRegister;
+
+    for (uint8_t registerVal : mRegisters)
+    {
+        *memoryAddress = registerVal;
+        memoryAddress++;
+    }
+}
+
+void MemoryManager::loadRegistersFromMemory()
+{
+    uint8_t* memoryAddress = mMemoryData.data() + mIndexRegister;
+
+    for (uint8_t& registerVal : mRegisters)
+    {
+        registerVal = *memoryAddress;
+        memoryAddress++;
     }
 }
 

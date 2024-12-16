@@ -4,8 +4,9 @@
 #include "DisplayHandler.h"
 #include "MemoryManager.h"
 
-#include "Timer/Timer.h"
+#include "../Timer/Timer.h"
 
+#include <cstdint>
 #include <fstream>
 #include <iosfwd>
 
@@ -81,9 +82,9 @@ void Application::handleInstruction(uint16_t instruction)
     enum class ProgramCounterBehaviour
     {
         none = 0,
-        skip_one_instruction = 1,
-        skip_one_instruction = 2
-    } pcBehavior { ProgramCounterBehaviour::skip_one_instruction };
+        jump_to_next_instruction = 1,
+        skip_next_instruction = 2
+    } pcBehavior { ProgramCounterBehaviour::jump_to_next_instruction };
 
     switch (instructionNibble)
     {
@@ -110,6 +111,8 @@ void Application::handleInstruction(uint16_t instruction)
         const uint16_t pcValue = instruction & 0xFFF;
         mProgramCounter = pcValue;
 
+        // don't increment PC afterwards
+        pcBehavior = ProgramCounterBehaviour::none;
         break;
     }
     case 2:
@@ -124,17 +127,32 @@ void Application::handleInstruction(uint16_t instruction)
     }
     case 3:
     {
-        // TODO
+        const int registerValue = mMemoryManager->getRegisterValue(secondNibble);
+        if (registerValue == secondByte)
+        {
+            pcBehavior = ProgramCounterBehaviour::skip_next_instruction;
+        }
         break;
     }
     case 4:
     {
-        // TODO
+        const int registerValue = mMemoryManager->getRegisterValue(secondNibble);
+        
+        if (registerValue != secondByte)
+        {
+            pcBehavior = ProgramCounterBehaviour::skip_next_instruction;
+        }
         break;
     }
     case 5:
     {
-        // TODO
+        const int firstValue = mMemoryManager->getRegisterValue(secondNibble);
+        const int secondValue = mMemoryManager->getRegisterValue(thirdNibble);
+
+        if (firstValue == secondValue)
+        {
+            pcBehavior = ProgramCounterBehaviour::skip_next_instruction;
+        }
         break;
     }
     case 6:
@@ -154,19 +172,29 @@ void Application::handleInstruction(uint16_t instruction)
     }
     case 9:
     {
-        // TODO
+        const int firstValue = mMemoryManager->getRegisterValue(secondNibble);
+        const int secondValue = mMemoryManager->getRegisterValue(thirdNibble);
+
+        if (firstValue != secondValue)
+        {
+            pcBehavior = ProgramCounterBehaviour::skip_next_instruction;
+        }
         break;
     }
     case 0xA:
     {
         // Set index register
-        const int newValue = instruction & 0xFFF;
+        const uint16_t newValue = instruction & 0xFFF;
         mMemoryManager->setIndexRegister(newValue);
         break;
     }
     case 0xB:
     {
-        // TODO
+        uint16_t newValue = instruction & 0xFFF;
+        newValue += mMemoryManager->getRegisterValue(0);
+
+        mProgramCounter = newValue;
+        pcBehavior = ProgramCounterBehaviour::none;
         break;
     }
     case 0xC: // random number
@@ -222,7 +250,9 @@ void Application::handleInstruction(uint16_t instruction)
         }
         case 0x1E:
         {
-            // TODO
+            const uint16_t newValue = mMemoryManager->getIndexRegister() + mMemoryManager->getRegisterValue(secondNibble);
+            mMemoryManager->setIndexRegister(newValue);
+            
             break;
         }
         case 0x0A:
@@ -242,12 +272,12 @@ void Application::handleInstruction(uint16_t instruction)
         }
         case 0x55:
         {
-            // TODO
+            mMemoryManager->storeRegistersInMemory();
             break;
         }
         case 0x65:
         {
-            // TODO
+            mMemoryManager->loadRegistersFromMemory();
             break;
         }
         }
@@ -259,5 +289,22 @@ void Application::handleInstruction(uint16_t instruction)
     }
     }
 
-    if (increaseProgramCounter) mProgramCounter += 2;
+    switch (pcBehavior)
+    {
+        case ProgramCounterBehaviour::none:
+        {
+            // do nothing; program counter has already been updated
+            break;
+        }
+        case ProgramCounterBehaviour::jump_to_next_instruction:
+        {
+            mProgramCounter += 2;
+            break;
+        }
+        case ProgramCounterBehaviour::skip_next_instruction:
+        {
+            mProgramCounter += 4;
+            break;
+        }
+    }
 }
