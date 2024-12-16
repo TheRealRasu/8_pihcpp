@@ -1,8 +1,11 @@
+#include "ApplicationDefines.h"
+#include <cstdint>
 #define SDL_MAIN_HANDLED
 #pragma once
 
 #include "SDL.h"
 
+#include <array>
 #include <memory>
 
 class DisplayHandler
@@ -39,4 +42,6 @@ class DisplayHandler
 
         std::unique_ptr<SDL_Renderer, SdlRendererDtor> mRenderer {};
         std::unique_ptr<SDL_Window, SdlWindowDtor> mWindow {};
+
+        std::array<std::array<uint8_t, gWindowHeight>, gWindowWidth> mImageData;
 };
