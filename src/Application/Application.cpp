@@ -78,6 +78,13 @@ void Application::handleInstruction(uint16_t instruction)
     const uint8_t thirdNibble = secondByte >> 4 & 0xF;
     const uint8_t fourthNibble = secondByte & 0xF;
 
+    enum class ProgramCounterBehaviour
+    {
+        none = 0,
+        skip_one_instruction = 1,
+        skip_one_instruction = 2
+    } pcBehavior { ProgramCounterBehaviour::skip_one_instruction };
+
     switch (instructionNibble)
     {
     case 0:
@@ -251,4 +258,6 @@ void Application::handleInstruction(uint16_t instruction)
         break;
     }
     }
+
+    if (increaseProgramCounter) mProgramCounter += 2;
 }
