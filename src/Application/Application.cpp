@@ -4,6 +4,8 @@
 #include "DisplayHandler.h"
 #include "MemoryManager.h"
 
+#include "Timer/Timer.h"
+
 #include <fstream>
 #include <iosfwd>
 
@@ -11,6 +13,11 @@ Application::Application()
 {
     mDisplayHandler = std::make_unique<DisplayHandler>();
     mMemoryManager = std::make_unique<MemoryManager>();
+
+    mDelayTimer = std::make_unique<Timer>();
+    mDelayTimer->setValue(60);
+
+    mSoundTimer = std::make_unique<Timer>();
 
     mProgramCounter = gMemoryStartAddress;
 }
@@ -45,8 +52,8 @@ void Application::load(const char* fileName)
 
 void Application::update()
 {
-    if (mSoundTimer > 0) mSoundTimer--;
-    if (mDelayTimer > 0) mDelayTimer--;
+    mSoundTimer->decreaseTimer();
+    mDelayTimer->decreaseTimer();
 
     // Step 1: Get current instruction
     const uint16_t currentInstruction = mMemoryManager->getCurrentInstruction(mProgramCounter);
@@ -66,12 +73,12 @@ void Application::handleInstruction(uint16_t instruction)
     const uint8_t firstByte = instruction >> 8 & 0xFF;
     const uint8_t secondByte = instruction & 0xFF;
 
-    const uint8_t firstNibble = firstByte >> 4 & 0xF;
+    const uint8_t instructionNibble = firstByte >> 4 & 0xF;
     const uint8_t secondNibble = firstByte & 0xF;
     const uint8_t thirdNibble = secondByte >> 4 & 0xF;
     const uint8_t fourthNibble = secondByte & 0xF;
 
-    switch (firstNibble)
+    switch (instructionNibble)
     {
     case 0:
     {
@@ -193,17 +200,17 @@ void Application::handleInstruction(uint16_t instruction)
         {
         case 0x07:
         {
-            mMemoryManager->setRegisterValue(secondNibble, mDelayTimer);
+            mMemoryManager->setRegisterValue(secondNibble, mDelayTimer->value());
             break;
         }
         case 0x15:
         {
-            mDelayTimer = mMemoryManager->getRegisterValue(secondNibble);
+            mDelayTimer->setValue(mMemoryManager->getRegisterValue(secondNibble));
             break;
         }
         case 0x18:
         {
-            mSoundTimer = mMemoryManager->getRegisterValue(secondNibble);
+            mSoundTimer->setValue(mMemoryManager->getRegisterValue(secondNibble));
             break;
         }
         case 0x1E:

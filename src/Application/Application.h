@@ -4,6 +4,7 @@
 
 class DisplayHandler;
 class MemoryManager;
+class Timer;
 
 class Application
 {
@@ -20,15 +21,12 @@ class Application
 
         std::unique_ptr<DisplayHandler> mDisplayHandler;
         std::unique_ptr<MemoryManager> mMemoryManager;
+     
+        std::unique_ptr<Timer> mSoundTimer;
+        std::unique_ptr<Timer> mDelayTimer;
 
         // program counter
         uint16_t mProgramCounter {};
-
-        // delay timer
-        uint8_t mDelayTimer { 60 };
-
-        // sound timer
-        uint8_t mSoundTimer {};
 
         // stack pointer
         uint8_t stackPos {};
