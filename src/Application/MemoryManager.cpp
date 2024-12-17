@@ -28,14 +28,14 @@ uint16_t MemoryManager::getCurrentInstruction(uint16_t programCounter) const
     return currentInstruction;
 }
 
-void MemoryManager::loadIntoMemory(void* data, uint16_t startingPosition, uint16_t dataSize)
+void MemoryManager::loadIntoMemory(uint8_t* data, uint16_t startingPosition, uint16_t dataSize)
 {
     std::memcpy(mMemoryData.data() + startingPosition, data, dataSize);
 }
 
-void* MemoryManager::getMemoryData(uint16_t memoryOffset)
+uint8_t* MemoryManager::getMemoryData(uint16_t memoryOffset)
 {
-    return reinterpret_cast<void*>(mMemoryData.data() + memoryOffset);
+    return (mMemoryData.data() + memoryOffset);
 }
 
 uint16_t MemoryManager::getIndexRegister() const

@@ -31,22 +31,32 @@ void DisplayHandler::stop()
 
 }
 
-void DisplayHandler::drawSprite(uint16_t xPos, uint16_t yPos, uint8_t spriteHeight, void* spriteData)
+bool DisplayHandler::drawSprite(uint16_t xPos, uint16_t yPos, uint8_t spriteHeight, uint8_t* spriteData)
 {
+    bool spritesFlipped {};
+
     const uint16_t startX = (xPos % gWindowWidth) * scale;
     const uint16_t startY = (yPos % gWindowHeight) * scale;
 
-    for (int x = startX; x < (startX + scale); x++)
+    for (int xCurrent = startX; xCurrent < (startX + scale); xCurrent++)
     {
-        if (x > gWindowWidth * scale) break;
+        if (xCurrent > gWindowWidth * scale) break;
 
-        for (int y = startY; y < startY + (spriteHeight * scale); y++)
+        for (int yCurrent = startY; yCurrent < startY + (spriteHeight * scale); yCurrent++)
         {
-            if (y > gWindowHeight * scale) break;
+            if (yCurrent > gWindowHeight * scale) break;
+
+            uint8_t& colorValue = mImageData[xCurrent * gWindowHeight + yCurrent];
+            const uint8_t memoryColorValue = *spriteData;
+            colorValue = 255 - colorValue;
+
+            spriteData++;
 
             // TODO get pixel information, draw other color
         }
     }
+
+    return spritesFlipped;
 }
 
 void DisplayHandler::clearWindow()
@@ -61,6 +71,8 @@ void DisplayHandler::clearWindow()
     SDL_RenderDrawRect(mRenderer.get(), &windowBox);
     SDL_SetRenderDrawColor(mRenderer.get(), 0, 0, 0, 0);
     SDL_RenderFillRect(mRenderer.get(), &windowBox);
+
+    std::fill(mImageData.begin(), mImageData.end(), 0);
 }
 
 void DisplayHandler::debugDraw()

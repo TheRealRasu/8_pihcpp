@@ -211,7 +211,7 @@ void Application::handleInstruction(uint16_t instruction)
         const int xValue = mMemoryManager->getRegisterValue(secondNibble) % gWindowWidth;
         const int yValue = mMemoryManager->getRegisterValue(thirdNibble) % gWindowHeight;
 
-        void* spriteData = mMemoryManager->getMemoryData(mMemoryManager->getIndexRegister());
+        uint8_t* spriteData = mMemoryManager->getMemoryData(mMemoryManager->getIndexRegister());
 
         mDisplayHandler->drawSprite(xValue, yValue, fourthNibble, spriteData);
         // TODO
@@ -267,7 +267,11 @@ void Application::handleInstruction(uint16_t instruction)
         }
         case 0x33:
         {
-            // TODO
+            const uint8_t registerValue = mMemoryManager->getRegisterValue(secondNibble);
+            const uint8_t currentIndex = mMemoryManager->getIndexRegister();
+            std::array<uint8_t, 3> decimals = { registerValue / 100, (registerValue / 10) % 10, registerValue % 10 };
+
+            mMemoryManager->loadIntoMemory(decimals.data(), currentIndex, 3);
             break;
         }
         case 0x55:

@@ -17,7 +17,7 @@ class DisplayHandler
         void start();
         void stop();
 
-        void drawSprite(uint16_t xPos, uint16_t yPos, uint8_t spriteHeight, void* spriteData);
+        bool drawSprite(uint16_t xPos, uint16_t yPos, uint8_t spriteHeight, uint8_t* spriteData);
     
         void clearWindow();
         void debugDraw();
@@ -43,5 +43,5 @@ class DisplayHandler
         std::unique_ptr<SDL_Renderer, SdlRendererDtor> mRenderer {};
         std::unique_ptr<SDL_Window, SdlWindowDtor> mWindow {};
 
-        std::array<std::array<uint8_t, gWindowHeight>, gWindowWidth> mImageData;
+        std::array<uint8_t, gWindowHeight * gWindowWidth> mImageData;
 };
