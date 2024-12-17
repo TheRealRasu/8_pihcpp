@@ -268,8 +268,8 @@ void Application::handleInstruction(uint16_t instruction)
         case 0x33:
         {
             const uint8_t registerValue = mMemoryManager->getRegisterValue(secondNibble);
-            const uint8_t currentIndex = mMemoryManager->getIndexRegister();
-            std::array<uint8_t, 3> decimals = { registerValue / 100, (registerValue / 10) % 10, registerValue % 10 };
+            const uint16_t currentIndex = mMemoryManager->getIndexRegister();
+            std::array<uint8_t, 3> decimals = { registerValue / 100u, (registerValue / 10u) % 10u, registerValue % 10u };
 
             mMemoryManager->loadIntoMemory(decimals.data(), currentIndex, 3);
             break;
