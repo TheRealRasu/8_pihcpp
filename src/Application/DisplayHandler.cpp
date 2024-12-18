@@ -19,7 +19,7 @@ void DisplayHandler::start()
 {
     SDL_Init(SDL_INIT_VIDEO);
 
-    mWindow.reset(SDL_CreateWindow("8_PIHC", gWindowXPos, gWindowYPos, gWindowWidth * scale, gWindowHeight * scale, SDL_WINDOW_SHOWN));
+    mWindow.reset(SDL_CreateWindow("8_PIHC", gWindowXPos, gWindowYPos, gWindowWidth, gWindowHeight, SDL_WINDOW_SHOWN));
     mRenderer.reset(SDL_CreateRenderer(mWindow.get(), -1, SDL_RENDERER_ACCELERATED));
     
     SDL_RenderClear(mRenderer.get());
@@ -35,25 +35,37 @@ bool DisplayHandler::drawSprite(uint16_t xPos, uint16_t yPos, uint8_t spriteHeig
 {
     bool spritesFlipped {};
 
-    const uint16_t startX = (xPos % gWindowWidth) * scale;
-    const uint16_t startY = (yPos % gWindowHeight) * scale;
+    const uint16_t startX = (xPos % gWindowWidth);
+    const uint16_t startY = (yPos % gWindowHeight);
 
-    for (int xCurrent = startX; xCurrent < (startX + scale); xCurrent++)
+    for (uint8_t yPos = startY; yPos < (startY + spriteHeight); yPos++)
     {
-        if (xCurrent > gWindowWidth * scale) break;
+        if (yPos > gWindowHeight) break;
 
-        for (int yCurrent = startY; yCurrent < startY + (spriteHeight * scale); yCurrent++)
+        const uint8_t incomingColorData = *spriteData;
+
+        uint8_t newColorByte {};
+
+        for (int xPos = startX; xPos < startX + 8; xPos++)
         {
-            if (yCurrent > gWindowHeight * scale) break;
+            if (xPos > gWindowWidth) break;
 
-            uint8_t& colorValue = mImageData[xCurrent * gWindowHeight + yCurrent];
-            const uint8_t memoryColorValue = *spriteData;
-            colorValue = 255 - colorValue;
+            uint8_t& memoryColorData = mImageData[yPos * gWindowWidth + xPos];
 
-            spriteData++;
+            const bool newBit = (incomingColorData >> (xPos - startX)) & 1;
+            if (newBit == false) continue;
 
-            // TODO get pixel information, draw other color
+            const bool memoryBit = memoryColorData & 1;
+
+            memoryColorData = (newBit ^ memoryBit);
+
+            if (newBit && memoryBit)
+            {
+                spritesFlipped = true;
+            }
         }
+
+        spriteData++;
     }
 
     return spritesFlipped;
@@ -61,31 +73,20 @@ bool DisplayHandler::drawSprite(uint16_t xPos, uint16_t yPos, uint8_t spriteHeig
 
 void DisplayHandler::clearWindow()
 {
-    SDL_Rect windowBox;
-    windowBox.w = gWindowWidth;
-    windowBox.h = gWindowHeight;
-    windowBox.x = gWindowXPos;
-    windowBox.y = gWindowYPos;
-
-    SDL_SetRenderDrawColor(mRenderer.get(), 0, 0, 0, 0);
-    SDL_RenderDrawRect(mRenderer.get(), &windowBox);
-    SDL_SetRenderDrawColor(mRenderer.get(), 0, 0, 0, 0);
-    SDL_RenderFillRect(mRenderer.get(), &windowBox);
-
     std::fill(mImageData.begin(), mImageData.end(), 0);
 }
 
-void DisplayHandler::debugDraw()
+void DisplayHandler::drawWindow()
 {
-    SDL_SetRenderDrawColor(mRenderer.get(), 255, 255, 255, 0);
-
-    for (int x = 10 * scale; x < 20 * scale; x++)
+    for (int xPos = 0; xPos < gWindowWidth; xPos++)
     {
-        for (int y = 10 * scale; y < 20 * scale; y++)
+        for (int yPos = 0; yPos < gWindowHeight; yPos++)
         {
-            SDL_RenderDrawPoint(mRenderer.get(), x, y);
+            const uint8_t pixel = mImageData[yPos * gWindowWidth + xPos];
+            const uint32_t color = pixel == 0 ? 0x00000000 : 0xFFFFFF00;
+            
+            SDL_SetRenderDrawColor(mRenderer.get(), (color >> 24) & 0xFF, (color >> 16) & 0xFF, (color >> 8) & 0xFF, color & 0xFF);
+            SDL_RenderDrawPoint(mRenderer.get(), xPos, yPos);
         }
     }
-
-    SDL_RenderPresent(mRenderer.get());
 }

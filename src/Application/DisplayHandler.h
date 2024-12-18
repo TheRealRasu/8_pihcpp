@@ -20,7 +20,7 @@ class DisplayHandler
         bool drawSprite(uint16_t xPos, uint16_t yPos, uint8_t spriteHeight, uint8_t* spriteData);
     
         void clearWindow();
-        void debugDraw();
+        void drawWindow();
 
     protected:
 

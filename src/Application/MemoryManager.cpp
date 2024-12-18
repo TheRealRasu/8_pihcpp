@@ -115,19 +115,30 @@ void MemoryManager::handleRegisterOnRegisterOperation(uint8_t operation, uint8_t
         mRegisters.at(firstRegister) -= mRegisters.at(secondRegister);
         break;
     }
-    case 6:
-    {
-        // TODO implement shift
-        break;
-    }
     case 7: // Subtract first register from second, save in first register
     {
         mRegisters.at(firstRegister) = mRegisters.at(secondRegister) - mRegisters.at(firstRegister);
         break;
     }
-    case 0xE:
+    case 6:
+    case 0xE: // shift
     {
-        // TODO implement shift
+        // If original chip: set secondRegister value to firstRegister value
+        uint8_t shiftedBit;
+        uint8_t& registerValue = mRegisters.at(firstRegister);
+        if (operation == 6)
+        {
+            shiftedBit = registerValue & 0x01;
+            registerValue >>= 1;
+            mRegisters.at(0xF) = shiftedBit;
+        }
+        else
+        {
+            shiftedBit = registerValue & 0x80;
+            registerValue <<= 1;
+            mRegisters.at(0xF) = shiftedBit;
+        }
+        
         break;
     }
     default:

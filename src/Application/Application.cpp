@@ -86,6 +86,8 @@ void Application::handleInstruction(uint16_t instruction)
         skip_next_instruction = 2
     } pcBehavior { ProgramCounterBehaviour::jump_to_next_instruction };
 
+    bool triggerRedraw {};
+
     switch (instructionNibble)
     {
     case 0:
@@ -93,6 +95,7 @@ void Application::handleInstruction(uint16_t instruction)
         if (secondByte == 0xE0) // clear window
         {
             mDisplayHandler->clearWindow();
+            triggerRedraw = true;
         }
         else if (secondByte == 0xEE)
         {
@@ -212,9 +215,11 @@ void Application::handleInstruction(uint16_t instruction)
         const int yValue = mMemoryManager->getRegisterValue(thirdNibble) % gWindowHeight;
 
         uint8_t* spriteData = mMemoryManager->getMemoryData(mMemoryManager->getIndexRegister());
+        const bool spriteFlipped = mDisplayHandler->drawSprite(xValue, yValue, fourthNibble, spriteData);
 
-        mDisplayHandler->drawSprite(xValue, yValue, fourthNibble, spriteData);
-        // TODO
+        mMemoryManager->setRegisterValue(0xF, spriteFlipped ? 1 : 0);
+        triggerRedraw = true;
+
         break;
     }
     case 0xE:
@@ -262,7 +267,9 @@ void Application::handleInstruction(uint16_t instruction)
         }
         case 0x29:
         {
-            // TODO
+            // set index register to font character
+            mMemoryManager->setIndexRegister(gFontOffset + (secondNibble * 5));
+
             break;
         }
         case 0x33:
@@ -295,20 +302,25 @@ void Application::handleInstruction(uint16_t instruction)
 
     switch (pcBehavior)
     {
-        case ProgramCounterBehaviour::none:
-        {
-            // do nothing; program counter has already been updated
-            break;
-        }
-        case ProgramCounterBehaviour::jump_to_next_instruction:
-        {
-            mProgramCounter += 2;
-            break;
-        }
-        case ProgramCounterBehaviour::skip_next_instruction:
-        {
-            mProgramCounter += 4;
-            break;
-        }
+    case ProgramCounterBehaviour::none:
+    {
+        // do nothing; program counter has already been updated
+        break;
+    }
+    case ProgramCounterBehaviour::jump_to_next_instruction:
+    {
+        mProgramCounter += 2;
+        break;
+    }
+    case ProgramCounterBehaviour::skip_next_instruction:
+    {
+        mProgramCounter += 4;
+        break;
+    }
+    }
+
+    if (triggerRedraw)
+    {
+        mDisplayHandler->drawWindow();
     }
 }
