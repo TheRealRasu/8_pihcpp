@@ -197,7 +197,7 @@ void Application::handleInstruction(uint16_t instruction)
     case 0xB:
     {
         uint16_t newValue = instruction & 0xFFF;
-        newValue += mMemoryManager->getRegisterValue(0);
+        newValue += mMemoryManager->getRegisterValue(secondNibble);
 
         mProgramCounter = newValue;
         pcBehavior = ProgramCounterBehaviour::none;
