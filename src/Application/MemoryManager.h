@@ -37,7 +37,6 @@ class MemoryManager
 
         // memory
         std::vector<uint8_t> mMemoryData {};
-        // TODO: mutexes!
         
         // registers V0 to VF
         std::vector<uint8_t> mRegisters {};

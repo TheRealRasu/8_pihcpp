@@ -32,16 +32,16 @@ void DisplayHandler::stop()
 
 }
 
-bool DisplayHandler::drawSprite(uint16_t xPos, uint16_t yPos, uint8_t spriteHeight, uint8_t* spriteData)
+bool DisplayHandler::drawSprite(uint16_t x, uint16_t y, uint8_t spriteHeight, uint8_t* spriteData)
 {
     bool spritesFlipped {};
 
-    const uint16_t startX = (xPos % gWindowWidth);
-    const uint16_t startY = (yPos % gWindowHeight);
+    const uint16_t startX = (x % gWindowWidth);
+    const uint16_t startY = (y % gWindowHeight);
 
     for (uint16_t yPos = startY; yPos < (startY + spriteHeight); yPos++)
     {
-        if (yPos > gWindowHeight) break;
+        if (yPos >= gWindowHeight) break;
 
         const uint8_t incomingColorData = *spriteData;
 
@@ -49,16 +49,16 @@ bool DisplayHandler::drawSprite(uint16_t xPos, uint16_t yPos, uint8_t spriteHeig
 
         for (uint16_t xPos = startX; xPos < startX + 8; xPos++)
         {
-            if (xPos > gWindowWidth) break;
+            if (xPos >= gWindowWidth) break;
 
             uint8_t& memoryColorData = mImageData[yPos * gWindowWidth + xPos];
 
-            const bool newBit = (incomingColorData >> (xPos - startX)) & 1;
+            const bool newBit = (incomingColorData >> (7 - (xPos - startX))) & 1;
             if (newBit == false) continue;
 
             const bool memoryBit = memoryColorData & 1;
 
-            memoryColorData = (newBit ^ memoryBit);
+            memoryColorData = (newBit != memoryBit);
 
             if (newBit && memoryBit)
             {

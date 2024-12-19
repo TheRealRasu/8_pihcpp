@@ -107,17 +107,37 @@ void MemoryManager::handleRegisterOnRegisterOperation(uint8_t operation, uint8_t
     }
     case 4: // Add
     {
-        mRegisters.at(firstRegister) += mRegisters.at(secondRegister);
+        uint8_t& firstRegisterValue = mRegisters.at(firstRegister);
+        const uint8_t secondRegisterValue = mRegisters.at(secondRegister);
+
+        if (255 - secondRegisterValue > firstRegisterValue)
+        {
+            mRegisters.at(0xF) = 1;
+        }
+        else
+        {
+            mRegisters.at(0xF) = 0;
+        }
+
+        firstRegisterValue += secondRegisterValue;
         break;
     }
     case 5: // Subtract second register from first, save in first register
     {
-        mRegisters.at(firstRegister) -= mRegisters.at(secondRegister);
+        uint8_t& firstRegisterValue = mRegisters.at(firstRegister);
+        const uint8_t secondRegisterValue = mRegisters.at(secondRegister);
+
+        mRegisters.at(0xF) = firstRegisterValue > secondRegisterValue ? 1 : 0;
+        firstRegisterValue -= mRegisters.at(secondRegister);
         break;
     }
     case 7: // Subtract first register from second, save in first register
     {
-        mRegisters.at(firstRegister) = mRegisters.at(secondRegister) - mRegisters.at(firstRegister);
+        uint8_t& firstRegisterValue = mRegisters.at(firstRegister);
+        const uint8_t secondRegisterValue = mRegisters.at(secondRegister);
+
+        mRegisters.at(0xF) = firstRegisterValue >= secondRegisterValue ? 0 : 1;
+        firstRegisterValue = secondRegisterValue - firstRegisterValue;
         break;
     }
     case 6:

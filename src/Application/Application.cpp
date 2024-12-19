@@ -100,6 +100,7 @@ void Application::handleInstruction(uint16_t instruction)
         else if (secondByte == 0xEE)
         {
             mProgramCounter = mMemoryManager->readFromPcStack();
+            pcBehavior = ProgramCounterBehaviour::none;
         }
         else
         {
@@ -126,6 +127,8 @@ void Application::handleInstruction(uint16_t instruction)
         // store current PC in PC stack
         mMemoryManager->storeInPcStack(mProgramCounter);
         mProgramCounter = subroutineAddress;
+
+        pcBehavior = ProgramCounterBehaviour::none;
         break;
     }
     case 3:
